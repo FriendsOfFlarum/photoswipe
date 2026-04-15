@@ -9,14 +9,14 @@ A [Flarum](https://flarum.org/) extension. [PhotoSwipe](https://photoswipe.com/)
 Install with composer:
 
 ```sh
-composer require :"*"
+composer require fof/photoswipe:"*"
 ```
 
 ## Updating
 
 ```sh
-composer update :"*"
-php flarum migrate
+composer update fof/photoswipe:"*"
+php flarum assets:publish
 php flarum cache:clear
 ```
 
