@@ -1,6 +1,6 @@
 <?php
 
-namespace SychO\PhotoSwipe;
+namespace FoF\PhotoSwipe;
 
 use s9e\TextFormatter\Configurator;
 
@@ -8,7 +8,7 @@ class MarkNormalPostImages
 {
     const TAGS = ['IMG' => 'src', 'UPL-IMAGE-PREVIEW' => 'url'];
 
-    public function __invoke(Configurator $config)
+    public function __invoke(Configurator $config): void
     {
         foreach (self::TAGS as $tagName => $src) {
             if ($config->tags->offsetExists($tagName)) {

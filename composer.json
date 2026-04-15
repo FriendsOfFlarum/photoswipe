@@ -1,29 +1,56 @@
 {
-    "name": "sycho/flarum-photoswipe",
-    "description": "PhotoSwipe integration",
-    "keywords": [
-        "flarum"
-    ],
+    "name": "fof/photoswipe",
+    "description": "Flarum PhotoSwipe integration",
     "type": "flarum-extension",
+    "keywords": [
+        "Flarum",
+        "lightbox",
+        "PhotoSwipe"
+    ],
+    "funding": [
+        {
+            "type": "website",
+            "url": "https://opencollective.com/fof/donate"
+        }
+    ],
     "license": "MIT",
-    "require": {
-        "flarum/core": "^1.5.0"
+    "homepage": "https://friendsofflarum.org",
+    "support": {
+        "issues": "https://github.com/FriendsOfFlarum/photoswipe/issues",
+        "source": "https://github.com/FriendsOfFlarum/photoswipe"
     },
     "authors": [
         {
-            "name": "Sami Mazouz",
-            "email": "sychocouldy@gmail.com",
-            "role": "Developer"
+            "name": "FriendsOfFlarum",
+            "homepage": "https://friendsofflarum.org"
         }
     ],
+    "replace": {
+        "sycho/flarum-photoswipe": "*"
+    },
+    "require": {
+        "php": "^8.1",
+        "flarum/core": "^1.8.0"
+    },
+    "require-dev": {
+        "flarum/testing": "^1.0.0"
+    },
     "autoload": {
         "psr-4": {
-            "SychO\\PhotoSwipe\\": "src/"
+            "FoF\\PhotoSwipe\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "FoF\\PhotoSwipe\\Tests\\": "tests/"
         }
     },
     "extra": {
+        "branch-alias": {
+            "dev-1.x": "1.x-dev"
+        },
         "flarum-extension": {
-            "title": "PhotoSwipe",
+            "title": "FoF PhotoSwipe",
             "category": "features",
             "optional-dependencies": [
                 "flarum/markdown", "flarum/bbcode",
@@ -31,7 +58,7 @@
             ],
             "icon": {
                 "name": "far fa-images",
-                "backgroundColor": "#117187",
+                "backgroundColor": "#e74c3c",
                 "color": "#fff"
             }
         },
@@ -56,11 +83,6 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "autoload-dev": {
-        "psr-4": {
-            "SychO\\PhotoSwipe\\Tests\\": "tests/"
-        }
-    },
     "scripts": {
         "test": [
             "@test:unit",
@@ -75,8 +97,5 @@
         "test:unit": "Runs all unit tests.",
         "test:integration": "Runs all integration tests.",
         "test:setup": "Sets up a database for use with integration tests. Execute this only once."
-    },
-    "require-dev": {
-        "flarum/testing": "^1.0.0"
     }
 }
