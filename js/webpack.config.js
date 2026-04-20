@@ -12,26 +12,7 @@ module.exports = (env, argv) => {
 
   /** @type {import('webpack').Configuration} */
   const customConfig = {
-    output: {
-      publicPath: 'auto',
-      chunkFilename: `chunk~[name]_[chunkhash].js`,
-    },
-    plugins: [
-      new CleanWebpackPlugin({
-        dry: false,
-        dangerouslyAllowCleanPatternsOutsideProject: true,
-        cleanOnceBeforeBuildPatterns: [path.resolve(process.cwd(), '../assets/*')],
-      }),
-      new FileManagerPlugin({
-        runTasksInSeries: true,
-        events: {
-          onEnd: {
-            copy: [{ source: 'dist/chunk*', destination: '../assets/' }],
-            delete: ['dist/chunk*'],
-          },
-        },
-      }),
-    ],
+    plugins: [],
     module: {
       rules: [
         {
