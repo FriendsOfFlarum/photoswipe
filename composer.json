@@ -17,7 +17,8 @@
     "homepage": "https://friendsofflarum.org",
     "support": {
         "issues": "https://github.com/FriendsOfFlarum/photoswipe/issues",
-        "source": "https://github.com/FriendsOfFlarum/photoswipe"
+        "source": "https://github.com/FriendsOfFlarum/photoswipe",
+        "forum": "https://discuss.flarum.org/d/39120"
     },
     "authors": [
         {
