@@ -6,6 +6,7 @@
   },
   "devDependencies": {
     "@flarum/prettier-config": "^1.0.0",
+    "@types/dom-close-watcher": "^1.0.0",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^7.1.4",
     "css-minimizer-webpack-plugin": "^8.0.0",

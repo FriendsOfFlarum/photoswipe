@@ -33,9 +33,10 @@ app.initializers.add('fof/photoswipe', () => {
         );
       }
 
-      this.lightbox = new PhotoSwipeLightbox({
+      const pswp = new PhotoSwipeLightbox({
         gallery: selectors.join(', '),
         children: 'a[data-pswp]',
+        escKey: !('CloseWatcher' in window),
         pswpModule: async () => {
           __webpack_public_path__ = `${app.forum.attribute('baseUrl')}/assets/extensions/fof-photoswipe/`;
           const pswpJs = import('photoswipe');
@@ -44,6 +45,26 @@ app.initializers.add('fof/photoswipe', () => {
           return pswpJs;
         },
       });
+
+      pswp.on('beforeOpen', () => {
+        if (!this.lightboxCloseWatcher && 'CloseWatcher' in window) {
+          this.lightboxCloseWatcher = new CloseWatcher();
+          this.lightboxCloseWatcher.onclose = () => {
+            this.lightboxCloseWatcher = undefined;
+            if (pswp.pswp && pswp.pswp.isOpen) {
+              pswp.pswp.close();
+            }
+          };
+        }
+      });
+      pswp.on('close', () => {
+        if (this.lightboxCloseWatcher) {
+          this.lightboxCloseWatcher.destroy();
+          this.lightboxCloseWatcher = undefined;
+        }
+      });
+
+      this.lightbox = pswp;
     });
 
     extend(prototype, ['onupdate', 'oncreate'], function (this) {
@@ -106,6 +127,10 @@ app.initializers.add('fof/photoswipe', () => {
       if (this.lightbox) {
         this.lightbox.destroy();
         this.lightbox = undefined;
+      }
+      if (this.lightboxCloseWatcher) {
+        this.lightboxCloseWatcher.destroy();
+        this.lightboxCloseWatcher = undefined;
       }
     });
   });
