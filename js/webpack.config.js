@@ -25,7 +25,7 @@ module.exports = (env, argv) => {
       new FileManagerPlugin({
         events: {
           onEnd: {
-            move: [{ source: 'dist/chunk*', destination: '../assets/' }],
+            copy: [{ source: 'dist/chunk*', destination: '../assets/' }],
           },
         },
       }),
