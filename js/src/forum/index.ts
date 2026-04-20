@@ -3,6 +3,7 @@ import { extend } from 'flarum/common/extend';
 import CommentPost from 'flarum/forum/components/CommentPost';
 import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import extractText from 'flarum/common/utils/extractText';
 
 app.initializers.add('fof/photoswipe', () => {
   const components: Array<CommentPost | DiscussionListItem> = [CommentPost.prototype];
@@ -37,6 +38,11 @@ app.initializers.add('fof/photoswipe', () => {
         gallery: selectors.join(', '),
         children: 'a[data-pswp]',
         escKey: !('CloseWatcher' in window),
+        closeTitle: extractText(app.translator.trans('fof-photoswipe.forum.close_title')),
+        zoomTitle: extractText(app.translator.trans('fof-photoswipe.forum.zoom_title')),
+        arrowPrevTitle: extractText(app.translator.trans('fof-photoswipe.forum.arrow_prev_title')),
+        arrowNextTitle: extractText(app.translator.trans('fof-photoswipe.forum.arrow_next_title')),
+        errorMsg: extractText(app.translator.trans('fof-photoswipe.forum.error_msg')),
         pswpModule: async () => {
           __webpack_public_path__ = `${app.forum.attribute('baseUrl')}/assets/extensions/fof-photoswipe/`;
           const pswpJs = import('photoswipe');
