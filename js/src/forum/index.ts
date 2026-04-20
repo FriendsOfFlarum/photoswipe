@@ -7,7 +7,7 @@ import PhotoSwipeLightbox from 'photoswipe/lightbox';
 app.initializers.add('fof/photoswipe', () => {
   const components: Array<CommentPost | DiscussionListItem> = [CommentPost.prototype];
 
-  if ('ianm-synopsis' in flarum.extensions) {
+  if ('fof-synopsis' in flarum.extensions) {
     components.push(DiscussionListItem.prototype);
   }
 
@@ -39,59 +39,74 @@ app.initializers.add('fof/photoswipe', () => {
         pswpModule: async () => {
           __webpack_public_path__ = `${app.forum.attribute('baseUrl')}/assets/extensions/fof-photoswipe/`;
           const pswpJs = import('photoswipe');
+          // Wait for the CSS to load to prevent flickering.
           await import('photoswipe/dist/photoswipe.css');
           return pswpJs;
         },
       });
     });
 
-    extend(prototype, ['onupdate', 'oncreate'], function () {
-      // @ts-ignore
-      this.$('a[data-pswp] > img').each((index, el: HTMLImageElement) => {
-        const $el = $(el);
-        const $a = $el.parent('a');
+    extend(prototype, ['onupdate', 'oncreate'], function (this) {
+      if (!this.lightbox) return;
+
+      const images = this.element.querySelectorAll<HTMLImageElement>('a[data-pswp] > img');
+      if (!images.length) return;
+
+      images.forEach((image, index) => {
+        const link = image.parentElement as HTMLAnchorElement;
+
         const setDimensions = () => {
-          $a.attr('data-pswp-width', el.naturalWidth);
-          $a.attr('data-pswp-height', el.naturalHeight);
+          link.dataset.pswpWidth = image.naturalWidth.toString();
+          link.dataset.pswpHeight = image.naturalHeight.toString();
         };
 
-        if (el.complete && el.naturalWidth) {
+        if (image.complete && image.naturalWidth) {
           setDimensions();
-          this.lightbox.init();
         } else {
-          el.onload = () => {
+          image.addEventListener('load', () => {
             setDimensions();
-            this.lightbox.init();
-
-            if (this.lightbox.pswp) this.lightbox.pswp.refreshSlideContent(index);
-          };
+            if (this.lightbox?.pswp) {
+              this.lightbox.pswp.refreshSlideContent(index);
+            }
+          });
         }
       });
 
-      // Timeout to make sure galleries were initialized
-      setTimeout(() => {
-        if (this.galleries) {
-          this.lightbox.on('change', () => {
-            // Match the swiper current slide with the photoswipe current slide.
-            const gallery = this.galleries.find((swiper: any) => this.lightbox.options.dataSource.gallery === swiper.$el[0]);
-            gallery?.slideTo(this.lightbox.pswp.currIndex, 0, false);
+      if (!this.lightboxInit) {
+        this.lightbox.init();
+        this.lightboxInit = true;
+      }
 
-            this.galleries
-              .filter((swiper: any) => this.lightbox.options.dataSource.gallery !== swiper.$el[0])
-              .map((swiper: any) => {
-                swiper.tmpCurrIndex = swiper.currIndex;
-                swiper.slideTo(this.lightbox.pswp.currIndex, 0, false);
-                return swiper;
-              })
-              .forEach((swiper: any) => swiper.slideTo(swiper.tmpCurrIndex, 0, false));
+      if (hasGalleryExtension && this.lightbox && this.galleries) {
+        this.lightbox.on('change', () => {
+          const pswp = this.lightbox?.pswp;
+          if (!pswp) return;
+
+          // @ts-ignore
+          const currEl: HTMLElement | undefined = pswp.currSlide?.data?.element ?? pswp.options?.dataSource?.items?.[pswp.currIndex]?.element;
+          if (!currEl) return;
+
+          const activeGallery = this.galleries!.find((swiper: any) => swiper.el.contains(currEl));
+          if (!activeGallery) return;
+
+          // @ts-ignore
+          const targetIndex = Array.from(activeGallery.slides).findIndex((slide) => slide.contains(currEl));
+          activeGallery.slideTo(targetIndex >= 0 ? targetIndex : pswp.currIndex, 0, false);
+
+          this.galleries!.filter((swiper) => swiper !== activeGallery).forEach((swiper) => {
+            const prev = swiper.tmpCurrIndex ?? swiper.activeIndex;
+            swiper.tmpCurrIndex = prev;
+            swiper.slideTo(prev, 0, false);
           });
-        }
-      }, 100);
+        });
+      }
     });
 
     extend(prototype, 'onremove', function () {
-      this.lightbox.destroy();
-      this.lightbox = null;
+      if (this.lightbox) {
+        this.lightbox.destroy();
+        this.lightbox = undefined;
+      }
     });
   });
 });
