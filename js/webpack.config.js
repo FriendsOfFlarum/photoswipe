@@ -23,9 +23,11 @@ module.exports = (env, argv) => {
         cleanOnceBeforeBuildPatterns: [path.resolve(process.cwd(), '../assets/*')],
       }),
       new FileManagerPlugin({
+        runTasksInSeries: true,
         events: {
           onEnd: {
             copy: [{ source: 'dist/chunk*', destination: '../assets/' }],
+            delete: ['dist/chunk*'],
           },
         },
       }),
