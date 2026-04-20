@@ -6,13 +6,19 @@
   },
   "devDependencies": {
     "@flarum/prettier-config": "^1.0.0",
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^7.1.4",
+    "css-minimizer-webpack-plugin": "^8.0.0",
+    "filemanager-webpack-plugin": "^10.0.1",
     "flarum-tsconfig": "^1.0.2",
     "flarum-webpack-config": "^2.0.0",
+    "mini-css-extract-plugin": "^2.10.2",
     "prettier": "^3.8.3",
+    "style-loader": "^4.0.0",
     "typescript": "^5.9.3",
-    "typescript-coverage-report": "^0.6.1",
     "webpack": "^5.106.2",
-    "webpack-cli": "^7.0.2"
+    "webpack-cli": "^7.0.2",
+    "webpack-merge": "^6.0.1"
   },
   "scripts": {
     "dev": "webpack --mode development --watch",
@@ -23,8 +29,7 @@
     "clean-typings": "npx rimraf dist-typings && mkdir dist-typings",
     "build-typings": "yarn run clean-typings && ([ -e src/@types ] && cp -r src/@types dist-typings/@types || true) && tsc && yarn run post-build-typings",
     "post-build-typings": "find dist-typings -type f -name '*.d.ts' -print0 | xargs -0 sed -i 's,../src/@types,@types,g'",
-    "check-typings": "tsc --noEmit --emitDeclarationOnly false",
-    "check-typings-coverage": "typescript-coverage-report"
+    "check-typings": "tsc --noEmit --emitDeclarationOnly false"
   },
   "prettier": "@flarum/prettier-config"
 }

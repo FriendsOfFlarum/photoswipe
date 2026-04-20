@@ -2,12 +2,10 @@ import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import CommentPost from 'flarum/forum/components/CommentPost';
 import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
-// @ts-ignore
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
-import pswpModule from 'photoswipe';
 
 app.initializers.add('fof/photoswipe', () => {
-  let components: any[] = [CommentPost.prototype];
+  const components: Array<CommentPost | DiscussionListItem> = [CommentPost.prototype];
 
   if ('ianm-synopsis' in flarum.extensions) {
     components.push(DiscussionListItem.prototype);
@@ -16,35 +14,20 @@ app.initializers.add('fof/photoswipe', () => {
   const hasGalleryExtension = 'datitisev-post-galleries' in flarum.extensions;
 
   components.forEach((prototype) => {
-    extend(prototype, 'oninit', function (this: any) {
-      const dataId = this.attrs.post?.id() || this.attrs.discussion?.id();
-      const selectors = [];
+    extend(prototype, 'oninit', function (this) {
+      // @ts-ignore
+      const dataId: string = this.attrs.post?.id() || this.attrs.discussion?.id();
+      const selectors: string[] = [
+        // A Photoswipe instance for images per post, per excerpt, and per article.
+        `[data-id="${dataId}"] .Post-body:not(:has(.swiper)), [data-id="${dataId}"] .item-excerpt:not(:has(.swiper)), .FlarumBlog-Article .Post-body:not(:has(.swiper))`,
+      ];
 
-      // The browser might not support :has yet.
-      try {
-        // A Photoswiper instance for images per post, per excerpt, and per article.
-        const selector = `[data-id="${dataId}"] .Post-body:not(:has(.swiper)), [data-id="${dataId}"] .item-excerpt:not(:has(.swiper)), .FlarumBlog-Article .Post-body:not(:has(.swiper))`;
-        document.querySelectorAll(selector);
-        selectors.push(selector);
-
-        if (hasGalleryExtension) {
-          const singleImagesOutsideGalleries = ':not(:has(.swiper)):not([class^="swiper"]):has(>a[data-pswp])';
-
-          selectors.push(
-            `[data-id="${dataId}"] .Post-body ${singleImagesOutsideGalleries}, [data-id="${dataId}"] .item-excerpt ${singleImagesOutsideGalleries}, .FlarumBlog-Article .Post-body ${singleImagesOutsideGalleries}`
-          );
-        }
-      } catch {
-        if (!hasGalleryExtension) {
-          selectors.push(
-            // A Photoswiper instance for images per post, per excerpt, and per article.
-            `[data-id="${dataId}"] .Post-body, [data-id="${dataId}"] .item-excerpt, .FlarumBlog-Article .Post-body`
-          );
-        }
-      }
-
-      // A Photoswiper instance for images per gallery (per post, per excerpt, and per article).
       if (hasGalleryExtension) {
+        const singleImagesOutsideGalleries = ':not(:has(.swiper)):not([class^="swiper"]):has(>a[data-pswp])';
+        selectors.push(
+          `[data-id="${dataId}"] .Post-body ${singleImagesOutsideGalleries}, [data-id="${dataId}"] .item-excerpt ${singleImagesOutsideGalleries}, .FlarumBlog-Article .Post-body ${singleImagesOutsideGalleries}`
+        );
+        // A Photoswipe instance for images per gallery (per post, per excerpt, and per article).
         selectors.push(
           `[data-id="${dataId}"] .Post-body .swiper, [data-id="${dataId}"] .item-excerpt .swiper, .FlarumBlog-Article .Post-body .swiper`
         );
@@ -53,7 +36,12 @@ app.initializers.add('fof/photoswipe', () => {
       this.lightbox = new PhotoSwipeLightbox({
         gallery: selectors.join(', '),
         children: 'a[data-pswp]',
-        pswpModule,
+        pswpModule: async () => {
+          __webpack_public_path__ = `${app.forum.attribute('baseUrl')}/assets/extensions/fof-photoswipe/`;
+          const pswpJs = import('photoswipe');
+          await import('photoswipe/dist/photoswipe.css');
+          return pswpJs;
+        },
       });
     });
 

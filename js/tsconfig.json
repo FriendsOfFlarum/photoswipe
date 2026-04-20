@@ -3,6 +3,8 @@
   "include": ["src/**/*", "../vendor/*/*/js/dist-typings/@types/**/*", "@types/**/*"],
   "compilerOptions": {
     "declarationDir": "./dist-typings",
+    "moduleResolution": "bundler",
+    "module": "es2022",
     "baseUrl": ".",
     "paths": {
       "flarum/*": ["../vendor/flarum/core/js/dist-typings/*"]
