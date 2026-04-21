@@ -26,12 +26,7 @@ app.initializers.add('fof/photoswipe', () => {
         arrowPrevTitle: extractText(app.translator.trans('fof-photoswipe.forum.arrow_prev_title')),
         arrowNextTitle: extractText(app.translator.trans('fof-photoswipe.forum.arrow_next_title')),
         errorMsg: extractText(app.translator.trans('fof-photoswipe.forum.error_msg')),
-        pswpModule: async () => {
-          const pswpJs = import('photoswipe');
-          // Wait for the CSS to load to prevent flickering.
-          await import('photoswipe/dist/photoswipe.css');
-          return pswpJs;
-        },
+        pswpModule: () => import('./photoswipe'),
       });
 
       pswp.on('beforeOpen', () => {
