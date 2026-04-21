@@ -9,7 +9,7 @@ app.initializers.add('fof/photoswipe', () => {
     const dataId: string = this.attrs.post.id()!;
 
     const pswp = new PhotoSwipeLightbox({
-      gallery: `[data-id="${dataId}"] .Post-body, [data-id="${dataId}"] .item-excerpt`,
+      gallery: `[data-id="${dataId}"] .Post-body`,
       children: 'a[data-pswp], a.FoFUpload--Upl-Image-Preview-Link',
       escKey: !('CloseWatcher' in window),
       closeTitle: extractText(app.translator.trans('fof-photoswipe.forum.close_title')),
