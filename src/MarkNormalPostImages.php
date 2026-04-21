@@ -6,15 +6,34 @@ use s9e\TextFormatter\Configurator;
 
 class MarkNormalPostImages
 {
-    const TAGS = ['IMG' => 'src', 'UPL-IMAGE-PREVIEW' => 'url'];
+    const array TAGS = ['IMG' => 'src'];
 
     public function __invoke(Configurator $config): void
     {
+        if (!$config->tags->offsetExists('URL')) {
+            return;
+        }
+
+        $urlTag = $config->tags->get('URL');
+
         foreach (self::TAGS as $tagName => $src) {
-            if ($config->tags->offsetExists($tagName)) {
-                $tag = $config->tags->get($tagName);
-                $tag->template = '<a data-pswp="" href="{@'.$src.'}">'.$tag->template.'</a>';
+            if (!$config->tags->offsetExists($tagName)) {
+                continue;
             }
+
+            $tag = $config->tags->get($tagName);
+            $inner = $tag->template;
+
+            $tag->template = <<<XSL
+                <xsl:choose>
+                    <xsl:when test="ancestor::URL">$inner</xsl:when>
+                    <xsl:otherwise>
+                        <a data-pswp="" href="{@$src}">$inner</a>
+                    </xsl:otherwise>
+                </xsl:choose>
+                XSL;
+
+            $urlTag->rules->allowChild($tagName);
         }
     }
 }
