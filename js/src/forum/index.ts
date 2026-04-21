@@ -19,7 +19,7 @@ app.initializers.add('fof/photoswipe', () => {
 
       const pswp = new PhotoSwipeLightbox({
         gallery: `[data-id="${dataId}"] .Post-body, [data-id="${dataId}"] .item-excerpt`,
-        children: 'a[data-pswp]',
+        children: 'a[data-pswp], a.FoFUpload--Upl-Image-Preview-Link',
         escKey: !('CloseWatcher' in window),
         closeTitle: extractText(app.translator.trans('fof-photoswipe.forum.close_title')),
         zoomTitle: extractText(app.translator.trans('fof-photoswipe.forum.zoom_title')),
@@ -53,18 +53,20 @@ app.initializers.add('fof/photoswipe', () => {
     extend(prototype, ['onupdate', 'oncreate'], function (this) {
       if (!this.lightbox) return;
 
-      const images = this.element.querySelectorAll<HTMLImageElement>('a[data-pswp] > img');
+      const images = this.element.querySelectorAll<HTMLImageElement>('a[data-pswp] > img, a.FoFUpload--Upl-Image-Preview-Link > img');
       if (!images.length) return;
 
       images.forEach((image, index) => {
         const link = image.parentElement as HTMLAnchorElement;
 
         const setDimensions = () => {
-          link.dataset.pswpWidth = image.naturalWidth.toString();
-          link.dataset.pswpHeight = image.naturalHeight.toString();
+          link.dataset.pswpWidth = image.getAttribute('width') || image.naturalWidth.toString();
+          link.dataset.pswpHeight = image.getAttribute('height') || image.naturalHeight.toString();
         };
 
-        if (image.complete && image.naturalWidth) {
+        if (image.getAttribute('width') && image.getAttribute('height')) {
+          setDimensions();
+        } else if (image.complete && image.naturalWidth) {
           setDimensions();
         } else {
           image.addEventListener('load', () => {

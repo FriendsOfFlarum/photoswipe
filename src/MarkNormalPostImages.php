@@ -6,7 +6,7 @@ use s9e\TextFormatter\Configurator;
 
 class MarkNormalPostImages
 {
-    const array TAGS = [ 'IMG' => 'src', 'UPL-IMAGE-PREVIEW' => 'url'];
+    const array TAGS = ['IMG' => 'src'];
 
     public function __invoke(Configurator $config): void
     {
