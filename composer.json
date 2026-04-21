@@ -5,7 +5,8 @@
     "keywords": [
         "Flarum",
         "lightbox",
-        "PhotoSwipe"
+        "PhotoSwipe",
+        "gallery"
     ],
     "funding": [
         {
@@ -54,8 +55,7 @@
             "title": "FoF PhotoSwipe",
             "category": "features",
             "optional-dependencies": [
-                "flarum/markdown", "flarum/bbcode",
-                "datitisev/flarum-post-galleries", "fof/upload"
+                "flarum/markdown", "flarum/bbcode", "fof/upload"
             ],
             "icon": {
                 "name": "far fa-images",

@@ -7,11 +7,3 @@ declare module 'flarum/forum/components/CommentPost' {
     lightboxCloseWatcher?: CloseWatcher;
   }
 }
-
-declare module 'flarum/forum/components/DiscussionListItem' {
-  export default interface DiscussionListItem {
-    lightboxInit?: boolean;
-    lightbox?: PhotoSwipeLightbox;
-    lightboxCloseWatcher?: CloseWatcher;
-  }
-}
