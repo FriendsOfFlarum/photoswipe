@@ -1,0 +1,10 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: "/js"
+    schedule:
+      interval: weekly
+    allow:
+      - dependency-name: photoswipe
+    open-pull-requests-limit: 1
