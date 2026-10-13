@@ -24,6 +24,8 @@ php flarum cache:clear
 
 ### Gallery extender
 
+Use the Gallery extender to add PhotoSwipe lightboxes to your own extension's components.
+
 With `fof/photoswipe` declared as an [optional dependency](https://docs.flarum.org/extend/extending-extensions/#optional-dependencies), in your extension's `js/src/forum/extend.ts`:
 
 ```ts
