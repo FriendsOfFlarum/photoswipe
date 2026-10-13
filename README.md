@@ -20,6 +20,24 @@ php flarum assets:publish
 php flarum cache:clear
 ```
 
+## For Developers
+
+### Gallery extender
+
+With `fof/photoswipe` declared as an optional dependency, in your extension's `js/src/forum/extend.ts`:
+
+```ts
+import Gallery from 'ext:fof/photoswipe/forum/extenders/Gallery';
+
+export default [
+  ...('fof-photoswipe' in flarum.extensions
+    ? [new Gallery('ext:mu-custom/extension/forum/components/ContentPage', '.ContentPage-body')]
+    : []),
+];
+```
+
+Pass a component class or module path (preserving lazy loading) and a container selector. Each matching container, including the root, is a separate gallery; containers must not be nested. The default image link selector is `a[data-pswp], a.FoFUpload--Upl-Image-Preview-Link`; override it with a third argument: `{ children: 'a.custom-image' }`.
+
 ## Links
 
 - [Packagist](https://packagist.org/packages/fof/photoswipe)
