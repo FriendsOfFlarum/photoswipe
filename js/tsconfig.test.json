@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["tests/**/*", "src/forum/env.d.ts"],
+  "files": ["./node_modules/@flarum/jest-config/shims.d.ts"],
+  "compilerOptions": {
+    "rootDir": "."
+  }
+}
