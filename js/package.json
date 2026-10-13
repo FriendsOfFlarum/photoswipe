@@ -1,23 +1,24 @@
 {
   "name": "@fof/photoswipe",
   "private": true,
+  "prettier": "@flarum/prettier-config",
   "dependencies": {
     "photoswipe": "^5.4.4"
   },
   "devDependencies": {
     "@flarum/prettier-config": "^1.0.0",
     "@types/dom-close-watcher": "^1.0.0",
-    "css-loader": "^7.1.4",
-    "cssnano": "^8.0.1",
+    "css-loader": "^7.1.5",
+    "cssnano": "^9.6.0",
     "flarum-tsconfig": "^2.0.0",
-    "flarum-webpack-config": "^3.0.4",
-    "postcss": "^8.5.14",
+    "flarum-webpack-config": "^3.0.6",
+    "postcss": "^8.5.29",
     "postcss-loader": "^8.2.1",
-    "prettier": "^3.8.3",
+    "prettier": "^3.9.10",
     "style-loader": "^4.0.0",
-    "typescript": "^5.9.3",
-    "webpack": "^5.106.2",
-    "webpack-cli": "^7.0.2",
+    "typescript": "^7.0.2",
+    "webpack": "^5.111.1",
+    "webpack-cli": "^7.2.3",
     "webpack-merge": "^6.0.1"
   },
   "scripts": {
@@ -26,10 +27,16 @@
     "analyze": "cross-env ANALYZER=true yarn run build",
     "format": "prettier --write src",
     "format-check": "prettier --check src",
-    "clean-typings": "npx rimraf dist-typings && mkdir dist-typings",
-    "build-typings": "yarn run clean-typings && ([ -e src/@types ] && cp -r src/@types dist-typings/@types || true) && tsc && yarn run post-build-typings",
+    "clean-typings": "pnx rimraf dist-typings && mkdir dist-typings",
+    "build-typings": "pnpm run clean-typings && ([ -e src/@types ] && cp -r src/@types dist-typings/@types || true) && tsc && pnpm run post-build-typings",
     "post-build-typings": "find dist-typings -type f -name '*.d.ts' -print0 | xargs -0 sed -i 's,../src/@types,@types,g'",
     "check-typings": "tsc --noEmit --emitDeclarationOnly false"
   },
-  "prettier": "@flarum/prettier-config"
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "onFail": "download",
+      "version": "^12.11.2"
+    }
+  }
 }
