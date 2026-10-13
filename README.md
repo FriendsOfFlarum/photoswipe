@@ -24,14 +24,14 @@ php flarum cache:clear
 
 ### Gallery extender
 
-With `fof/photoswipe` declared as an optional dependency, in your extension's `js/src/forum/extend.ts`:
+With `fof/photoswipe` declared as an [optional dependency](https://docs.flarum.org/extend/extending-extensions/#optional-dependencies), in your extension's `js/src/forum/extend.ts`:
 
 ```ts
 import Gallery from 'ext:fof/photoswipe/forum/extenders/Gallery';
 
 export default [
   ...('fof-photoswipe' in flarum.extensions
-    ? [new Gallery('ext:mu-custom/extension/forum/components/ContentPage', '.ContentPage-body')]
+    ? [new Gallery('ext:custom/extension/forum/components/ContentPage', '.ContentPage-body')]
     : []),
 ];
 ```
