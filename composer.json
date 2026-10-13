@@ -32,10 +32,10 @@
     },
     "require": {
         "php": "^8.3",
-        "flarum/core": "^v2.0.0"
+        "flarum/core": "^2.0"
     },
     "require-dev": {
-        "flarum/testing": "^v2.0.0"
+        "flarum/testing": "^2.0"
     },
     "autoload": {
         "psr-4": {

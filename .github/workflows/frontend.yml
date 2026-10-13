@@ -8,12 +8,12 @@ jobs:
     with:
       enable_bundlewatch: false
       enable_prettier: true
-      enable_typescript: false
+      enable_typescript: true
 
       frontend_directory: ./js
       backend_directory: .
       node_version: 24
-      js_package_manager: yarn
+      js_package_manager: pnpm
       main_git_branch: 2.x
 
     secrets:
