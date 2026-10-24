@@ -7,14 +7,14 @@
     "photoswipe": "^5.4.4"
   },
   "devDependencies": {
-    "@flarum/jest-config": "2.0.2",
+    "@flarum/jest-config": "^2.1.1",
     "@flarum/prettier-config": "^1.0.0",
     "@jest/globals": "29.7.0",
     "@types/dom-close-watcher": "^1.0.0",
     "css-loader": "^7.1.5",
     "cssnano": "^9.6.0",
     "flarum-tsconfig": "^2.0.0",
-    "flarum-webpack-config": "^3.0.6",
+    "flarum-webpack-config": "^3.1.0",
     "flat": "^6.0.1",
     "jest": "29.7.0",
     "js-yaml": "^5.4.3",
