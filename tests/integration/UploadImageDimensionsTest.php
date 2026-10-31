@@ -4,14 +4,12 @@ namespace FoF\PhotoSwipe\Tests\integration;
 
 use DOMDocument;
 use Flarum\Discussion\Discussion;
-use Flarum\Post\CommentPost;
 use Flarum\Post\Post;
 use Flarum\Testing\integration\TestCase;
-use FoF\PhotoSwipe\UploadImageDimensions;
-use FoF\Upload\Relations\EmbeddedFiles;
+use Flarum\Formatter\Formatter;
+use Flarum\User\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use s9e\TextFormatter\Renderer;
 
 class UploadImageDimensionsTest extends TestCase
 {
@@ -101,34 +99,15 @@ class UploadImageDimensionsTest extends TestCase
     }
 
     #[Test]
-    public function the_dimension_hook_performs_no_queries_with_or_without_preloaded_files(): void
+    public function original_dimensions_are_available_outside_posts(): void
     {
-        $hook = $this->app()->getContainer()->make(UploadImageDimensions::class);
-        $post = CommentPost::findOrFail(1);
-        $loaded = CommentPost::with(EmbeddedFiles::NAME)->findOrFail(1);
-        $database = $this->database();
+        $formatter = $this->app()->getContainer()->make(Formatter::class);
+        $html = $formatter->render('<r>'.$this->image(1).'</r>', new User());
 
-        foreach ([null, $post, $loaded] as $context) {
-            $database->flushQueryLog();
-            $database->enableQueryLog();
-            try {
-                $xml = $hook($this->createStub(Renderer::class), $context, $post->getAttributes()['content']);
-                $queries = $database->getQueryLog();
-            } finally {
-                $database->disableQueryLog();
-                $database->flushQueryLog();
-            }
-
-            $this->assertSame([], $queries);
-            if ($context === $loaded) {
-                $this->assertStringContainsString('data-pswp-width="2400"', $xml);
-                $this->assertStringContainsString('data-pswp-height="800"', $xml);
-            } else {
-                $this->assertSame($post->getAttributes()['content'], $xml);
-            }
-        }
+        $this->assertStringContainsString('data-pswp-width="2400"', $html);
+        $this->assertStringContainsString('data-pswp-height="800"', $html);
+        $this->assertStringContainsString('width="800" height="267"', $html);
     }
-
     #[Test]
     #[DataProvider('requestPairs')]
     public function upload_queries_do_not_grow_with_the_number_of_posts(array $few, array $many): void

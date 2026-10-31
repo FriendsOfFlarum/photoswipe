@@ -18,7 +18,6 @@ return [
     (new Extend\Conditional())
         ->whenExtensionEnabled('fof-upload', fn () => [
             (new Extend\Formatter())
-                ->configure([UploadImageDimensions::class, 'configure'])
-                ->render(UploadImageDimensions::class),
+                ->configure(UploadImageDimensions::class),
         ]),
 ];
