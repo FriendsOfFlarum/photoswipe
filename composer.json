@@ -36,10 +36,7 @@
     },
     "require-dev": {
         "flarum/testing": "^2.0",
-        "fof/upload": "^2.0.2"
-    },
-    "conflict": {
-        "fof/upload": "<2.0.2"
+        "fof/upload": "^2.1.1"
     },
     "autoload": {
         "psr-4": {
